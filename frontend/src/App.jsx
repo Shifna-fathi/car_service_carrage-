@@ -9,6 +9,21 @@ import MainLayout from "./components/MainLayout";
 import ItemForm from "./components/ItemForm";
 import ItemTable from "./components/ItemTable";
 import Logout from "./components/Logout";
+import UnitManagement from "./pages/Inventory/UnitManagement";
+import ReorderAlerts from "./components/ReorderAlerts";
+import VehicleManagement from "./pages/VehicleCustomer/VehicleManagement";
+import CustomerManagement from "./pages/VehicleCustomer/CustomerManagement";
+import InsuranceWarrantyReminders from "./pages/VehicleCustomer/InsuranceWarrantyReminders";
+import CustomerPreferences from "./pages/VehicleCustomer/CustomerPreferences";
+import CustomerFeedback from "./pages/VehicleCustomer/CustomerFeedback";
+import CustomerLoyaltyPoints from "./pages/VehicleCustomer/CustomerLoyaltyPoints";
+import BranchManagement from "./pages/BranchManagement";
+import UserManagement from "./pages/UserManagement";
+import SupplierManagement from "./pages/Inventory/SupplierManagement";
+import BarcodeGenerator from "./pages/BarcodeGenerator";
+import WarehouseInventory from "./pages/WarehouseInventory";
+import ServiceBayInventory from "./pages/ServiceBayInventory";
+import JobOrders from "./pages/JobOrders";
 
 function ItemFormWrapper() {
   const navigate = useNavigate();
@@ -51,23 +66,48 @@ function App() {
           }
         />
 
-        {/* Item management routes with role-based protection */}
-        <Route
-          path="item"
-          element={
-            <ProtectedRoute roles={["super_admin", "admin"]}>
-              <ItemTable />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="item-form"
-          element={
-            <ProtectedRoute roles={["super_admin", "admin"]}>
-              <ItemFormWrapper />
-            </ProtectedRoute>
-          }
-        />
+        {/* Item management routes */}
+        <Route path="item" element={<ItemTable />} />
+        <Route path="item-form" element={<ItemFormWrapper />} />
+        
+        {/* Unit management route */}
+        <Route path="unit" element={<UnitManagement />} />
+        
+        {/* Reorder Alerts route */}
+        <Route path="reorder-alerts" element={<ReorderAlerts />} />
+
+        {/* Vehicle & Customer Management route */}
+        <Route path="vehicle-customer" element={<VehicleManagement />} />
+
+        {/* Customer Management route */}
+        <Route path="customers" element={<CustomerManagement />} />
+
+        {/* Insurance, Warranty & Reminders route */}
+        <Route path="insurance-warranty-reminders" element={<InsuranceWarrantyReminders />} />
+
+        {/* Customer Engagement routes */}
+        <Route path="customer-preferences" element={<CustomerPreferences />} />
+        <Route path="customer-feedback" element={<CustomerFeedback />} />
+        <Route path="customer-loyalty-points" element={<CustomerLoyaltyPoints />} />
+
+        {/* Branch management route */}
+        <Route path="branch" element={<BranchManagement />} />
+
+        {/* User management route */}
+        <Route path="users" element={<UserManagement />} />
+
+        {/* Supplier management route */}
+        <Route path="supplier" element={<SupplierManagement />} />
+
+        {/* Barcode generator and reader routes */}
+        <Route path="barcode-generator" element={<BarcodeGenerator />} />
+
+        {/* Warehouse and Service Bay inventory routes */}
+        <Route path="warehouse-inventory" element={<WarehouseInventory />} />
+        <Route path="service-bay-inventory" element={<ServiceBayInventory />} />
+
+        {/* Job orders route */}
+        <Route path="job-orders" element={<JobOrders />} />
 
         {/* Explicit role-based dashboards */}
         {["super_admin", "admin", "manager", "branch_manager", "cashier"].map(
@@ -75,11 +115,7 @@ function App() {
             <Route
               key={role}
               path={role}
-              element={
-                <ProtectedRoute role={role}>
-                  <Dashboard role={role} />
-                </ProtectedRoute>
-              }
+              element={<Dashboard role={role} />}
             />
           )
         )}
