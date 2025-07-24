@@ -145,44 +145,46 @@ export default function InsuranceWarrantyReminders() {
       {/* Vehicle List Table */}
       <div className="mb-8">
         <h3 className="text-lg font-semibold text-blue-600 mb-2">All Vehicles</h3>
-        <table className="min-w-full text-sm border border-gray-300">
-          <thead className="bg-gray-100 sticky top-0 z-10">
-            <tr>
-              <th className="py-2 px-3 border text-left min-w-[120px]">Make</th>
-              <th className="py-2 px-3 border text-left min-w-[120px]">Model</th>
-              <th className="py-2 px-3 border text-left min-w-[140px]">Registration No.</th>
-              <th className="py-2 px-3 border text-left min-w-[160px]">Insurance Company</th>
-              <th className="py-2 px-3 border text-left min-w-[120px]">Policy No.</th>
-              <th className="py-2 px-3 border text-left min-w-[140px]">Insurance Expiry</th>
-              <th className="py-2 px-3 border text-left min-w-[120px]">Warranty Type</th>
-              <th className="py-2 px-3 border text-left min-w-[140px]">Warranty Start</th>
-              <th className="py-2 px-3 border text-left min-w-[140px]">Warranty Expiry</th>
-              <th className="py-2 px-3 border text-left min-w-[160px]">Covered</th>
-            </tr>
-          </thead>
-          <tbody>
-            {vehicles.length === 0 ? (
+        <div className="overflow-x-auto rounded-lg shadow">
+          <table className="min-w-full text-sm border border-gray-300 bg-white">
+            <thead className="bg-blue-700 text-white">
               <tr>
-                <td colSpan="11" className="py-6 text-gray-500 text-center">No vehicles added yet.</td>
+                <th className="py-3 px-4 border text-center min-w-[120px]">Make</th>
+                <th className="py-3 px-4 border text-center min-w-[120px]">Model</th>
+                <th className="py-3 px-4 border text-center min-w-[140px]">Registration No.</th>
+                <th className="py-3 px-4 border text-center min-w-[160px]">Insurance Company</th>
+                <th className="py-3 px-4 border text-center min-w-[120px]">Policy No.</th>
+                <th className="py-3 px-4 border text-center min-w-[140px]">Insurance Expiry</th>
+                <th className="py-3 px-4 border text-center min-w-[120px]">Warranty Type</th>
+                <th className="py-3 px-4 border text-center min-w-[140px]">Warranty Start</th>
+                <th className="py-3 px-4 border text-center min-w-[140px]">Warranty Expiry</th>
+                <th className="py-3 px-4 border text-center min-w-[160px]">Covered</th>
               </tr>
-            ) : (
-              vehicles.map(v => (
-                <tr key={v.id} className="hover:bg-gray-50">
-                  <td className="py-2 px-3 border text-left">{v.make}</td>
-                  <td className="py-2 px-3 border text-left">{v.model}</td>
-                  <td className="py-2 px-3 border text-left">{v.regNo}</td>
-                  <td className="py-2 px-3 border text-left">{v.insurance?.company}</td>
-                  <td className="py-2 px-3 border text-left">{v.insurance?.policyNumber}</td>
-                  <td className="py-2 px-3 border text-left">{v.insurance?.expiryDate}</td>
-                  <td className="py-2 px-3 border text-left">{v.warranty?.type}</td>
-                  <td className="py-2 px-3 border text-left">{v.warranty?.startDate}</td>
-                  <td className="py-2 px-3 border text-left">{v.warranty?.expiryDate}</td>
-                  <td className="py-2 px-3 border text-left">{v.warranty?.covered}</td>
+            </thead>
+            <tbody>
+              {vehicles.length === 0 ? (
+                <tr>
+                  <td colSpan="10" className="py-8 text-gray-500 text-center">No vehicles added yet.</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                vehicles.map((v, idx) => (
+                  <tr key={v.id} className={idx % 2 === 0 ? "bg-gray-50 hover:bg-blue-50" : "bg-white hover:bg-blue-50"}>
+                    <td className="py-2 px-4 border text-center align-middle">{v.make}</td>
+                    <td className="py-2 px-4 border text-center align-middle">{v.model}</td>
+                    <td className="py-2 px-4 border text-center align-middle">{v.regNo}</td>
+                    <td className="py-2 px-4 border text-center align-middle">{v.insurance?.company}</td>
+                    <td className="py-2 px-4 border text-center align-middle">{v.insurance?.policyNumber}</td>
+                    <td className="py-2 px-4 border text-center align-middle">{v.insurance?.expiryDate}</td>
+                    <td className="py-2 px-4 border text-center align-middle">{v.warranty?.type}</td>
+                    <td className="py-2 px-4 border text-center align-middle">{v.warranty?.startDate}</td>
+                    <td className="py-2 px-4 border text-center align-middle">{v.warranty?.expiryDate}</td>
+                    <td className="py-2 px-4 border text-center align-middle">{v.warranty?.covered}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
       {selectedVehicleId ? (
         <>

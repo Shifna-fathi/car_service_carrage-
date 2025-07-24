@@ -1,10 +1,17 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+
 Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->group(function () {
     Route::get('me', [AuthController::class, 'me']);
     Route::post('logout', [AuthController::class, 'logout']);
+    // User management routes
+    Route::get('users', [UserController::class, 'index']);
+    Route::post('users', [UserController::class, 'store']);
+    Route::put('users/{id}', [UserController::class, 'update']);
+    Route::delete('users/{id}', [UserController::class, 'destroy']);
     Route::get('super-admin', function () {
         return response()->json(['message' => 'Super Admin Dashboard']);
     })->middleware('role:super_admin');

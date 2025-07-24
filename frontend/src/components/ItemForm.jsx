@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FiPackage, FiDollarSign, FiBox, FiTag, FiMapPin } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
 export default function ItemForm({ onSave, onCancel, initialData, editMode }) {
+  const navigate = useNavigate();
   const [form, setForm] = useState(initialData || {
     itemId: '', name: '', shortName: '', expiry: '', barcode: '', mrp: '',
     cost: '', salesPrice: '', minPrice: '',
@@ -142,6 +144,12 @@ export default function ItemForm({ onSave, onCancel, initialData, editMode }) {
 
   return (
     <div style={styles.container}>
+      <button
+        onClick={() => onCancel ? onCancel() : navigate('/item')}
+        style={{ marginBottom: 20, padding: '0.5rem 1.2rem', background: '#2563eb', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, fontSize: 16, cursor: 'pointer' }}
+      >
+        ← Back
+      </button>
       <h2 style={styles.title}>Create New Product</h2>
       {/* Branch Selection */}
       <div style={styles.section}>
@@ -260,23 +268,25 @@ export default function ItemForm({ onSave, onCancel, initialData, editMode }) {
         </div>
       </div>
 
-      <button
-        style={styles.saveButton}
-        onClick={(e) => {
-          e.preventDefault();
-          onSave(form);
-        }}
-      >
-        {editMode ? 'Update' : 'Save'}
-      </button>
-      {onCancel && (
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginTop: 32 }}>
         <button
-          style={{ ...styles.saveButton, backgroundColor: '#aaa', marginLeft: 16 }}
-          onClick={onCancel}
+          style={{ padding: '0.8rem 1.5rem', fontSize: '1rem', backgroundColor: '#2563eb', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}
+          onClick={(e) => {
+            e.preventDefault();
+            onSave(form);
+          }}
         >
-          Cancel
+          {editMode ? 'Update' : 'Save'}
         </button>
-      )}
+        {onCancel && (
+          <button
+            style={{ padding: '0.8rem 1.5rem', fontSize: '1rem', backgroundColor: '#2563eb', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+        )}
+      </div>
 
       {/* Dialog for adding new classification value */}
       {dialogOpen && (
