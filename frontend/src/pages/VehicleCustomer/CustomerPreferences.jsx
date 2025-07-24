@@ -20,6 +20,7 @@ export default function CustomerPreferences({ onSave }) {
   const savePreferences = () => {
     if (onSave) onSave(prefs);
     alert('Preferences saved!');
+    setPrefs({ timeSlot: '', communication: '', package: '' }); // Reset form
   };
 
   const openDialog = (field) => {
@@ -49,6 +50,7 @@ export default function CustomerPreferences({ onSave }) {
           <div className="text-sm font-semibold text-blue-700 mb-1">Time Slot</div>
           <div className="flex gap-2 items-center">
             <select name="timeSlot" value={prefs.timeSlot} onChange={handle} className="border rounded-lg px-4 py-2 flex-1">
+              <option value="">-- Select --</option>
               {options.timeSlot.map(opt => <option key={opt} value={opt}>{opt}</option>)}
             </select>
             <button type="button" className="bg-blue-600 text-white px-3 py-2 rounded-full hover:bg-blue-700" onClick={() => openDialog('timeSlot')}>+</button>
@@ -58,6 +60,7 @@ export default function CustomerPreferences({ onSave }) {
           <div className="text-sm font-semibold text-blue-700 mb-1">Communication Preference</div>
           <div className="flex gap-2 items-center">
             <select name="communication" value={prefs.communication} onChange={handle} className="border rounded-lg px-4 py-2 flex-1">
+              <option value="">-- Select --</option>
               {options.communication.map(opt => <option key={opt} value={opt}>{opt}</option>)}
             </select>
             <button type="button" className="bg-blue-600 text-white px-3 py-2 rounded-full hover:bg-blue-700" onClick={() => openDialog('communication')}>+</button>
@@ -67,6 +70,7 @@ export default function CustomerPreferences({ onSave }) {
           <div className="text-sm font-semibold text-blue-700 mb-1">Favorite Service Package</div>
           <div className="flex gap-2 items-center">
             <select name="package" value={prefs.package} onChange={handle} className="border rounded-lg px-4 py-2 flex-1">
+              <option value="">-- Select --</option>
               {options.package.map(opt => <option key={opt} value={opt}>{opt}</option>)}
             </select>
             <button type="button" className="bg-blue-600 text-white px-3 py-2 rounded-full hover:bg-blue-700" onClick={() => openDialog('package')}>+</button>

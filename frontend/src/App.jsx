@@ -24,6 +24,14 @@ import BarcodeGenerator from "./pages/BarcodeGenerator";
 import WarehouseInventory from "./pages/WarehouseInventory";
 import ServiceBayInventory from "./pages/ServiceBayInventory";
 import JobOrders from "./pages/JobOrders";
+import PaymentVoucher from "./pages/PaymentVoucher";
+import ReceiptVoucher from "./pages/ReceiptVoucher";
+import Ledger from "./pages/Ledger";
+import EntityLedger from "./pages/EntityLedger";
+import ProfitLossStatement from "./pages/ProfitLossStatement";
+import BalanceSheet from "./pages/BalanceSheet";
+import TrialBalance from "./pages/TrialBalance";
+import CompanyManagement from "./pages/Inventory/CompanyManagement";
 
 function ItemFormWrapper() {
   const navigate = useNavigate();
@@ -66,62 +74,47 @@ function App() {
           }
         />
 
-        {/* Item management routes */}
-        <Route path="item" element={<ItemTable />} />
-        <Route path="item-form" element={<ItemFormWrapper />} />
-        
+        {/* Item management routes - admin, manager only */}
+        <Route path="item" element={<ProtectedRoute roles={["admin", "manager"]}><ItemTable /></ProtectedRoute>} />
+        <Route path="item-form" element={<ProtectedRoute roles={["admin", "manager"]}><ItemFormWrapper /></ProtectedRoute>} />
         {/* Unit management route */}
-        <Route path="unit" element={<UnitManagement />} />
-        
+        <Route path="unit" element={<ProtectedRoute roles={["admin", "manager"]}><UnitManagement /></ProtectedRoute>} />
         {/* Reorder Alerts route */}
-        <Route path="reorder-alerts" element={<ReorderAlerts />} />
-
-        {/* Vehicle & Customer Management route */}
-        <Route path="vehicle-customer" element={<VehicleManagement />} />
-
-        {/* Customer Management route */}
-        <Route path="customers" element={<CustomerManagement />} />
-
-        {/* Insurance, Warranty & Reminders route */}
-        <Route path="insurance-warranty-reminders" element={<InsuranceWarrantyReminders />} />
-
-        {/* Customer Engagement routes */}
-        <Route path="customer-preferences" element={<CustomerPreferences />} />
-        <Route path="customer-feedback" element={<CustomerFeedback />} />
-        <Route path="customer-loyalty-points" element={<CustomerLoyaltyPoints />} />
-
-        {/* Branch management route */}
-        <Route path="branch" element={<BranchManagement />} />
-
-        {/* User management route */}
-        <Route path="users" element={<UserManagement />} />
-
-        {/* Supplier management route */}
-        <Route path="supplier" element={<SupplierManagement />} />
-
-        {/* Barcode generator and reader routes */}
-        <Route path="barcode-generator" element={<BarcodeGenerator />} />
-
-        {/* Warehouse and Service Bay inventory routes */}
-        <Route path="warehouse-inventory" element={<WarehouseInventory />} />
-        <Route path="service-bay-inventory" element={<ServiceBayInventory />} />
-
-        {/* Job orders route */}
-        <Route path="job-orders" element={<JobOrders />} />
-
-        {/* Explicit role-based dashboards */}
-        {["super_admin", "admin", "manager", "branch_manager", "cashier"].map(
-          (role) => (
-            <Route
-              key={role}
-              path={role}
-              element={<Dashboard role={role} />}
-            />
-          )
-        )}
-
-        {/* Catch all inside protected layout */}
-        <Route path="*" element={<Navigate to="dashboard" replace />} />
+        <Route path="reorder-alerts" element={<ProtectedRoute roles={["admin", "manager"]}><ReorderAlerts /></ProtectedRoute>} />
+        {/* Vehicle & Customer Management route - admin, manager, technician, receptionist */}
+        <Route path="vehicle-customer" element={<ProtectedRoute roles={["admin", "manager", "technician", "receptionist"]}><VehicleManagement /></ProtectedRoute>} />
+        {/* Customer Management route - admin, manager, technician, receptionist */}
+        <Route path="customers" element={<ProtectedRoute roles={["admin", "manager", "technician", "receptionist"]}><CustomerManagement /></ProtectedRoute>} />
+        {/* Insurance, Warranty & Reminders route - admin, manager, technician, receptionist */}
+        <Route path="insurance-warranty-reminders" element={<ProtectedRoute roles={["admin", "manager", "technician", "receptionist"]}><InsuranceWarrantyReminders /></ProtectedRoute>} />
+        {/* Customer Engagement routes - admin, manager, technician, receptionist */}
+        <Route path="customer-preferences" element={<ProtectedRoute roles={["admin", "manager", "technician", "receptionist"]}><CustomerPreferences /></ProtectedRoute>} />
+        <Route path="customer-feedback" element={<ProtectedRoute roles={["admin", "manager", "technician", "receptionist"]}><CustomerFeedback /></ProtectedRoute>} />
+        <Route path="customer-loyalty-points" element={<ProtectedRoute roles={["admin", "manager", "technician", "receptionist"]}><CustomerLoyaltyPoints /></ProtectedRoute>} />
+        {/* Branch management - admin, manager only */}
+        <Route path="branch-management" element={<ProtectedRoute roles={["admin", "manager"]}><BranchManagement /></ProtectedRoute>} />
+        {/* User management - admin, manager only */}
+        <Route path="user-management" element={<ProtectedRoute roles={["admin", "manager"]}><UserManagement /></ProtectedRoute>} />
+        {/* Supplier management - admin, manager only */}
+        <Route path="supplier-management" element={<ProtectedRoute roles={["admin", "manager"]}><SupplierManagement /></ProtectedRoute>} />
+        {/* Barcode generator - admin, manager only */}
+        <Route path="barcode-generator" element={<ProtectedRoute roles={["admin", "manager"]}><BarcodeGenerator /></ProtectedRoute>} />
+        {/* Warehouse inventory - admin, manager only */}
+        <Route path="warehouse-inventory" element={<ProtectedRoute roles={["admin", "manager"]}><WarehouseInventory /></ProtectedRoute>} />
+        {/* Service bay inventory - admin, manager only */}
+        <Route path="service-bay-inventory" element={<ProtectedRoute roles={["admin", "manager"]}><ServiceBayInventory /></ProtectedRoute>} />
+        {/* Job orders - admin, manager only */}
+        <Route path="job-orders" element={<ProtectedRoute roles={["admin", "manager"]}><JobOrders /></ProtectedRoute>} />
+        {/* Accounts - admin, manager, accountant only */}
+        <Route path="payment-voucher" element={<ProtectedRoute roles={["admin", "manager", "accountant"]}><PaymentVoucher /></ProtectedRoute>} />
+        <Route path="receipt-voucher" element={<ProtectedRoute roles={["admin", "manager", "accountant"]}><ReceiptVoucher /></ProtectedRoute>} />
+        <Route path="ledger" element={<ProtectedRoute roles={["admin", "manager", "accountant"]}><Ledger /></ProtectedRoute>} />
+        <Route path="entity-ledger" element={<ProtectedRoute roles={["admin", "manager", "accountant"]}><EntityLedger /></ProtectedRoute>} />
+        <Route path="profit-loss-statement" element={<ProtectedRoute roles={["admin", "manager", "accountant"]}><ProfitLossStatement /></ProtectedRoute>} />
+        <Route path="balance-sheet" element={<ProtectedRoute roles={["admin", "manager", "accountant"]}><BalanceSheet /></ProtectedRoute>} />
+        <Route path="trial-balance" element={<ProtectedRoute roles={["admin", "manager", "accountant"]}><TrialBalance /></ProtectedRoute>} />
+        {/* Company management - admin, manager only */}
+        <Route path="company-management" element={<ProtectedRoute roles={["admin", "manager"]}><CompanyManagement /></ProtectedRoute>} />
       </Route>
 
       {/* Global catch all fallback */}

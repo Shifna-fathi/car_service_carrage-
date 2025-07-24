@@ -38,13 +38,21 @@ const Sidebar = () => {
   const [salesInventoryOpen, setSalesInventoryOpen] = useState(false);
   const [vehicleCustomerOpen, setVehicleCustomerOpen] = useState(false);
   const [branchOpen, setBranchOpen] = useState(false);
+  const [accountsOpen, setAccountsOpen] = useState(false);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     setRole(storedUser?.role || "guest");
   }, []);
 
-  const hasFullAccess = ["super_admin", "admin", "manager"].includes(role);
+  // Role-based access logic
+  const canAccess = (section) => {
+    if (role === "super_admin" || role === "manager") return true;
+    if (role === "accountant" && section === "accounts") return true;
+    if ((role === "technician" || role === "receptionist") && section === "vehicle_customer") return true;
+    if (section === "dashboard" || section === "logout") return true;
+    return false;
+  };
 
   const navItem = (Icon, label, path) => (
     <li
@@ -101,8 +109,46 @@ const Sidebar = () => {
           <ul className="space-y-3">
             {navItem(FaTachometerAlt, "Dashboard", "/dashboard")}
             {navItem(FaBuilding, "Branch", "/branch")}
+            <li>
+              <button onClick={() => setAccountsOpen && setAccountsOpen(!accountsOpen)} className="flex items-center justify-between w-full px-4 py-2 rounded-md hover:bg-white/20">
+                <div className="flex items-center gap-3 w-full">
+                  <FaCogs />
+                  <span className="text-left w-full">Accounts</span>
+                </div>
+                <span>{accountsOpen ? "▲" : "▼"}</span>
+              </button>
+              {accountsOpen && (
+                <ul className="pl-10 pt-2 space-y-2 text-white/90 bg-white/10 rounded">
+                  {navItem(FaFileInvoice, "Payment Voucher", "/payment-voucher")}
+                  {navItem(FaFileInvoice, "Receipt Voucher", "/receipt-voucher")}
+                  {navItem(FaFileInvoice, "Ledger", "/ledger")}
+                  {navItem(FaFileInvoice, "Entity Ledger", "/entity-ledger")}
+                  {navItem(FaFileInvoice, "Profit & Loss Statement", "/profit-loss-statement")}
+                  {navItem(FaFileInvoice, "Balance Sheet", "/balance-sheet")}
+                  {navItem(FaFileInvoice, "Trial Balance", "/trial-balance")}
+                </ul>
+              )}
+            </li>
 
             {/* Users menu and submenus removed as requested */}
+            {['admin', 'manager', 'technician', 'receptionist'].includes(role) && (
+              <li>
+                <button onClick={() => setUsersOpen(!usersOpen)} className="flex items-center justify-between w-full px-4 py-2 rounded-md hover:bg-white/20">
+                  <div className="flex items-center gap-3 w-full">
+                    <FaUsers />
+                    <span className="text-left w-full">Customer Engagement</span>
+                  </div>
+                  <span>{usersOpen ? "▲" : "▼"}</span>
+                </button>
+                {usersOpen && (
+                  <ul className="pl-10 pt-2 space-y-2 text-white/90 bg-white/10 rounded">
+                    {navItem(FaUserCog, "Preferences", "/customer-preferences")}
+                    {navItem(FaUserTie, "Feedback", "/customer-feedback")}
+                    {navItem(FaUser, "Loyalty Points", "/customer-loyalty-points")}
+                  </ul>
+                )}
+              </li>
+            )}
             {/* Vehicle & Customer Management as main menu item with submenu */}
             <li>
               <button onClick={() => setVehicleCustomerOpen(!vehicleCustomerOpen)} className="flex items-center justify-between w-full px-4 py-2 rounded-md hover:bg-white/20">
@@ -201,72 +247,25 @@ const Sidebar = () => {
                 </ul>
               )}
             </li>
-            {/* Inventory */}
-            {hasFullAccess && (
+            {['admin', 'manager'].includes(role) && (
               <li>
                 <button onClick={() => setInventoryOpen(!inventoryOpen)} className="flex items-center justify-between w-full px-4 py-2 rounded-md hover:bg-white/20">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 w-full">
                     <FaBox />
-                    <span>Inventory</span>
+                    <span className="text-left w-full">Inventory</span>
                   </div>
                   <span>{inventoryOpen ? "▲" : "▼"}</span>
                 </button>
                 {inventoryOpen && (
                   <ul className="pl-10 pt-2 space-y-2 text-white/90 bg-white/10 rounded">
-                    {navItem(FaCube, "Item", "/item")}
-                    {navItem(FaBox, "Unit", "/unit")}
+                    {navItem(FaBox, "Item", "/item")}
+                    {navItem(FaCube, "Unit", "/unit")}
+                    {navItem(FaTruck, "Supplier", "/supplier-management")}
+                    {navItem(FaBuilding, "Company", "/company-management")}
+                    {navItem(FaBarcode, "Barcode Generator", "/barcode-generator")}
+                    {navItem(FaBox, "Warehouse Inventory", "/warehouse-inventory")}
+                    {navItem(FaBox, "Service Bay Inventory", "/service-bay-inventory")}
                     {navItem(FaBell, "Reorder Alerts", "/reorder-alerts")}
-                    {navItem(FaTruck, "Supplier", "/supplier")}
-                    {navItem(FaBuilding, "Company", "/company")}
-                    <li className="flex items-center gap-3 px-4 py-2 rounded-full hover:bg-white/20 active:bg-white/30 cursor-pointer transition-colors" onClick={() => navigate("/barcode-generator")}
-                        tabIndex={0} onKeyDown={e => e.key === "Enter" && navigate("/barcode-generator")}
-                        role="link" aria-label="Go to Barcode Generator">
-                      <FaBarcode className="min-w-[20px]" />
-                      <span className="truncate max-w-[160px] block relative">
-                        <span style={{
-                          display: 'inline-block',
-                          whiteSpace: 'nowrap',
-                          animation: 'marquee 6s linear infinite',
-                          minWidth: '100%',
-                          position: 'relative',
-                        }}>
-                          Barcode Generator
-                        </span>
-                      </span>
-                    </li>
-                    {navItem(FaClipboardList, "Job Orders", "/job-orders")}
-                    <li className="flex items-center gap-3 px-4 py-2 rounded-full hover:bg-white/20 active:bg-white/30 cursor-pointer transition-colors" onClick={() => navigate("/warehouse-inventory")}
-                        tabIndex={0} onKeyDown={e => e.key === "Enter" && navigate("/warehouse-inventory")}
-                        role="link" aria-label="Go to Warehouse Inventory">
-                      <FaBox className="min-w-[20px]" />
-                      <span className="truncate max-w-[160px] block relative">
-                        <span style={{
-                          display: 'inline-block',
-                          whiteSpace: 'nowrap',
-                          animation: 'marquee 6s linear infinite',
-                          minWidth: '100%',
-                          position: 'relative',
-                        }}>
-                          Warehouse Inventory
-                        </span>
-                      </span>
-                    </li>
-                    <li className="flex items-center gap-3 px-4 py-2 rounded-full hover:bg-white/20 active:bg-white/30 cursor-pointer transition-colors" onClick={() => navigate("/service-bay-inventory")}
-                        tabIndex={0} onKeyDown={e => e.key === "Enter" && navigate("/service-bay-inventory")}
-                        role="link" aria-label="Go to Service Bay Inventory">
-                      <FaTools className="min-w-[20px]" />
-                      <span className="truncate max-w-[160px] block relative">
-                        <span style={{
-                          display: 'inline-block',
-                          whiteSpace: 'nowrap',
-                          animation: 'marquee 6s linear infinite',
-                          minWidth: '100%',
-                          position: 'relative',
-                        }}>
-                          Service Bay Inventory
-                        </span>
-                      </span>
-                    </li>
                   </ul>
                 )}
               </li>

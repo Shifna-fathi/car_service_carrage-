@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import TopNavBar from "./TopNavBar";
 import { Outlet } from "react-router-dom";
-import BubblesBackground from "./BubblesBackground";
+// import BubblesBackground from "./BubblesBackground";
 
 export default function MainLayout() {
   const [items, setItems] = useState([]);
   return (
     <div style={{ position: "relative", minHeight: "100vh", overflow: "hidden" }}>
-      <BubblesBackground />
+      {/* <BubblesBackground /> */}
       <div style={{ position: "relative", zIndex: 1 }}>
         <div className="flex h-screen overflow-hidden">
           <Sidebar />

@@ -140,70 +140,66 @@ export default function ItemTable() {
   return (
     <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-md p-6 mt-6">
       {/* Top Controls */}
-      <div className="flex flex-wrap justify-between items-center gap-3 mb-4">
-        <div className="flex gap-2">
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700"
-            onClick={() => setShowForm(true)}
-          >
-            <FiFilePlus /> Add Item
-          </button>
-          
-          {/* Reorder Alerts Button */}
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 relative"
-            onClick={() => navigate('/reorder-alerts')}
-          >
-            <FaBell /> Reorder Alerts
-            {reorderAlertsCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-blue-300 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                {reorderAlertsCount}
-              </span>
-            )}
-          </button>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          {/* Import Button */}
+      {!showForm && (
+        <div className="flex flex-wrap justify-between items-center gap-3 mb-4">
+          <div className="flex gap-2">
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700"
+              onClick={() => setShowForm(true)}
+            >
+              <FiFilePlus /> Add Item
+            </button>
+            {/* Reorder Alerts Button */}
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 relative"
+              onClick={() => navigate('/reorder-alerts')}
+            >
+              <FaBell /> Reorder Alerts
+              {reorderAlertsCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-blue-300 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                  {reorderAlertsCount}
+                </span>
+              )}
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {/* Import Button */}
+            <input
+              type="file"
+              accept=".xlsx, .xls"
+              onChange={handleImport}
+              className="hidden"
+              id="excelImport"
+            />
+            <label
+              htmlFor="excelImport"
+              className="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg cursor-pointer hover:bg-blue-100"
+            >
+              📁 Import Excel
+            </label>
+            {/* Export Button */}
+            <button
+              onClick={handleExport}
+              className="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-100"
+            >
+              ⬇ Export Excel
+            </button>
+            <button
+              className="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-100"
+              onClick={handleDeleteAll}
+            >
+              🗑 Delete All
+            </button>
+          </div>
           <input
-            type="file"
-            accept=".xlsx, .xls"
-            onChange={handleImport}
-            className="hidden"
-            id="excelImport"
+            type="text"
+            className="border rounded-lg px-4 py-2 w-60"
+            placeholder="🔍 Search items..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <label
-            htmlFor="excelImport"
-            className="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg cursor-pointer hover:bg-blue-100"
-          >
-            📁 Import Excel
-          </label>
-
-          {/* Export Button */}
-          <button
-            onClick={handleExport}
-            className="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-100"
-          >
-            ⬇ Export Excel
-          </button>
-
-          <button
-            className="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-100"
-            onClick={handleDeleteAll}
-          >
-            🗑 Delete All
-          </button>
         </div>
-
-        <input
-          type="text"
-          className="border rounded-lg px-4 py-2 w-60"
-          placeholder="🔍 Search items..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-
+      )}
       {/* Form or Table */}
       {showForm ? (
         <ItemForm

@@ -11,12 +11,6 @@ class DatabaseSeeder extends Seeder
         Branch::create(['name' => 'Main Branch', 'location' => 'Downtown']);
         Branch::create(['name' => 'West Branch', 'location' => 'West City']);
         User::create([
-            'name' => 'Super Admin',
-            'email' => 'superadmin@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'super_admin',
-        ]);
-        User::create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
@@ -29,17 +23,24 @@ class DatabaseSeeder extends Seeder
             'role' => 'manager',
         ]);
         User::create([
-            'name' => 'Branch Manager',
-            'email' => 'branchmanager@example.com',
+            'name' => 'Technician',
+            'email' => 'technician@example.com',
             'password' => Hash::make('password'),
-            'role' => 'branch_manager',
+            'role' => 'technician',
             'branch_id' => 1,
         ]);
         User::create([
-            'name' => 'Cashier',
-            'email' => 'cashier@example.com',
+            'name' => 'Accountant',
+            'email' => 'accountant@example.com',
             'password' => Hash::make('password'),
-            'role' => 'cashier',
+            'role' => 'accountant',
+            'branch_id' => 1,
+        ]);
+        User::create([
+            'name' => 'Receptionist',
+            'email' => 'receptionist@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'receptionist',
             'branch_id' => 1,
         ]);
     }

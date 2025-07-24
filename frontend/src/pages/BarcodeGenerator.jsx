@@ -30,7 +30,7 @@ export default function BarcodeGenerator() {
       {value && (
         <div className="flex flex-col items-center mt-4">
           <div ref={printRef}>
-            <Barcode value={value} />
+            <Barcode value={value} format="CODE128" displayValue={false} />
             <p className="mt-2 text-gray-600">{value}</p>
           </div>
           <button

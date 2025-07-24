@@ -29,49 +29,21 @@ const Login = () => {
 
     setLoading(true);
     try {
-      // Sanctum CSRF cookie (only needed if using Sanctum)
-      await axios.get('http://localhost:8000/sanctum/csrf-cookie', {
-        withCredentials: true,
+      const response = await axios.post('http://localhost:8000/api/login', {
+        email: email.trim(),
+        password: password.trim(),
       });
-
-      // Login API request
-      const response = await axios.post(
-        'http://localhost:8000/api/login',
-        {
-          email: email.trim(),
-          password: password.trim(),
-        },
-        {
-          withCredentials: true,
-        }
-      );
-
       const { token, user } = response.data;
-
       if (!user?.role) {
         setApiError('User role missing');
         setLoading(false);
         return;
       }
-
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
-
-      const roleRoutes = ['admin', 'super_admin', 'manager', 'branch_manager', 'cashier'];
-      if (roleRoutes.includes(user.role)) {
-        navigate(`/${user.role}`);
-      } else {
-        console.warn('Unknown user role:', user.role);
-        navigate('/unauthorized');
-      }
-
+      navigate('/dashboard');
     } catch (error) {
-      console.error('Login error:', error);
-      if (error.response?.data?.message) {
-        setApiError(error.response.data.message);
-      } else {
-        setApiError('Login failed. Try again.');
-      }
+      setApiError('Login failed. Check your credentials.');
     } finally {
       setLoading(false);
     }
